@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import '../styles/CraftPizzaPage.css'; // Specific styles for this page
-import logo from '../assets/pngwing.com.png'; // Your logo
-import '../styles/HomePage.css'; // Ensure navbar styles remain consistent
+import axios from 'axios';
+import '../styles/CraftPizzaPage.css';
+import logo from '../assets/pngwing.com.png';
+import '../styles/HomePage.css';
 
 function CraftPizzaPage() {
   const [method, setMethod] = useState('CarryOut');
@@ -29,29 +30,49 @@ function CraftPizzaPage() {
     );
   };
 
-  const handleAddToOrder = () => {
+  const handleAddToOrder = async () => {
     const pizzaDetails = {
       method,
       size,
       crust,
       quantity,
       toppings,
+      price: calculatePrice(size, toppings.length, quantity),
+      userId: localStorage.getItem('userId'), // Get userId from localStorage
     };
-    console.log('Pizza added to order:', pizzaDetails);
-    alert('Pizza added to order!');
+
+    try {
+      const res = await axios.post('http://localhost:3000/api/orders', pizzaDetails, {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth-token': localStorage.getItem('token'), // Add token if needed
+        },
+      });
+      console.log('Order saved:', res.data);
+      alert('Pizza added to order!');
+    } catch (err) {
+      console.error('Error saving order:', err.response.data);
+      alert('Failed to add pizza to order');
+    }
+  };
+
+  const calculatePrice = (size, toppingsCount, quantity) => {
+    let basePrice = 10;
+    if (size === 'Medium') basePrice += 3;
+    if (size === 'Large') basePrice += 5;
+    const toppingsPrice = toppingsCount * 0.5;
+    return (basePrice + toppingsPrice) * quantity;
   };
 
   return (
     <div className="craft-pizza-page">
-      {/* Navbar */}
       <nav className="navbar">
         <div className="navbar-logo">
           <a href="/">
-            <img src={logo} alt="Pizza Steve Logo" className="navbar-img" />
+            <img src={logo} alt="Pizza Logo" className="navbar-img" />
             Pizza Steve
           </a>
         </div>
-
         <div className="nav-links">
           <a href="/">Home</a>
           <a href="/order">Order (0)</a>
@@ -59,11 +80,9 @@ function CraftPizzaPage() {
           <a href="/logout">Logout</a>
         </div>
       </nav>
-
       <header>
-      <h2 className="form-title">Customize Your Pizza</h2> {/* Added this line */}
+        <h2 className="form-title">Customize Your Pizza</h2>
       </header>
-      
       <form className="pizza-form">
         <div className="form-group">
           <label htmlFor="method">Method:</label>
@@ -72,7 +91,6 @@ function CraftPizzaPage() {
             <option value="Delivery">Delivery</option>
           </select>
         </div>
-
         <div className="form-group">
           <label htmlFor="size">Size:</label>
           <select id="size" value={size} onChange={(e) => setSize(e.target.value)}>
@@ -81,7 +99,6 @@ function CraftPizzaPage() {
             <option value="Large">Large</option>
           </select>
         </div>
-
         <div className="form-group">
           <label htmlFor="crust">Crust:</label>
           <select id="crust" value={crust} onChange={(e) => setCrust(e.target.value)}>
@@ -90,7 +107,6 @@ function CraftPizzaPage() {
             <option value="Stuffed Crust">Stuffed Crust</option>
           </select>
         </div>
-
         <div className="form-group">
           <label htmlFor="quantity">Quantity:</label>
           <input
@@ -101,27 +117,28 @@ function CraftPizzaPage() {
             onChange={(e) => setQuantity(parseInt(e.target.value))}
           />
         </div>
-
         <div className="form-group">
           <label>Toppings:</label>
           <div className="toppings-list">
             {availableToppings.map((topping, index) => (
-              <div key={index} className="topping-item">
+              <div key={index} className="topping">
                 <input
                   type="checkbox"
-                  id={`topping-${index}`}
+                  id={topping}
                   checked={toppings.includes(topping)}
                   onChange={() => handleToppingChange(topping)}
                 />
-                <label htmlFor={`topping-${index}`}>{topping}</label>
+                <label htmlFor={topping}>{topping}</label>
               </div>
             ))}
           </div>
         </div>
-
-        <button type="button" className="add-to-order-btn" onClick={handleAddToOrder}>
-          Add to Order
-        </button>
+        <div className="form-group">
+          <p>Total Price: ${calculatePrice(size, toppings.length, quantity)}</p>
+          <button type="button" onClick={handleAddToOrder} className="submit-btn">
+            Add to Order
+          </button>
+        </div>
       </form>
     </div>
   );

@@ -1,15 +1,15 @@
 import React from 'react';
-import '../styles/HomePage.css'; // Make sure this file has the updated CSS
+import '../styles/HomePage.css'; 
 import logo from '../assets/pngwing.com.png';
 
-// Import images for option boxes
-import newOrderImage from '../assets/shutterstock_594962792_94b9c79e519a4889a49d455415711911.jpeg'; // Replace with your actual path
-import favoriteImage from '../assets/shutterstock_594962792_94b9c79e519a4889a49d455415711911.jpeg'; // Replace with your actual path
-import surpriseMeImage from '../assets/shutterstock_594962792_94b9c79e519a4889a49d455415711911.jpeg'; // Replace with your actual path
+
+import newOrderImage from '../assets/shutterstock_594962792_94b9c79e519a4889a49d455415711911.jpeg'; 
+import favoriteImage from '../assets/shutterstock_594962792_94b9c79e519a4889a49d455415711911.jpeg'; 
+import surpriseMeImage from '../assets/shutterstock_594962792_94b9c79e519a4889a49d455415711911.jpeg'; 
 
 function HomePage() {
   return (
-    <div className="homepage home-page-background">  {/* Added class here */}
+    <div className="homepage home-page-background">  {}
       <nav className="navbar">
         <div className="navbar-logo">
           <a href="/">
@@ -35,7 +35,7 @@ function HomePage() {
           <img src={newOrderImage} alt="New Order" />
           <h3>New Order</h3>
           <p>Go to a new order page to build a pizza from scratch.</p>
-          <button onClick={() => window.location.href = '/new-order'}>New Order</button>
+          <button onClick={() => window.location.href = '/pizzacraft'}>New Order</button>
         </div>
 
         <div className="option">

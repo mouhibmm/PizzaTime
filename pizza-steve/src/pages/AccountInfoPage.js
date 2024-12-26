@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/AccountInfoPage.css';
 import logo from '../assets/pngwing.com.png';
+
 const AccountInfoPage = () => {
   const [formData, setFormData] = useState({
     firstname: '',
@@ -13,8 +14,7 @@ const AccountInfoPage = () => {
   });
 
   const [orders, setOrders] = useState([]);
-  const userId = localStorage.getItem('userId'); // Retrieve from localStorage
-
+  const userId = localStorage.getItem('userId'); 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -28,7 +28,7 @@ const AccountInfoPage = () => {
           adress: data.adress,
           city: data.city,
           state: data.state,
-          password: data.password || '', // Optional
+          password: data.password || '', 
         });
       } catch (error) {
         console.error('Error fetching user data:', error);
@@ -37,7 +37,7 @@ const AccountInfoPage = () => {
 
     const fetchUserOrders = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/api/user/${userId}/orders`);
+        const response = await fetch(`http://localhost:3000/api/orders/${userId}`);
         if (!response.ok) throw new Error('Failed to fetch orders');
         const data = await response.json();
         setOrders(data);
@@ -87,10 +87,10 @@ const AccountInfoPage = () => {
     <div className="account-info-container">
       <nav className="navbar">
         <div className="navbar-logo">
-        <a href="/">
-          <img src={logo} alt="Pizza Steve Logo" className="navbar-img" />
+          <a href="/">
+            <img src={logo} alt="Pizza Steve Logo" className="navbar-img" />
             Pizza Steve
-            </a>
+          </a>
         </div>
         <ul className="navbar-links">
           <li><a href="/">Home</a></li>
@@ -136,7 +136,7 @@ const AccountInfoPage = () => {
               <input
                 type="text"
                 name="adress"
-                placeholder="Adress"
+                placeholder="Address"
                 value={formData.adress}
                 onChange={handleChange}
                 required
@@ -152,12 +152,11 @@ const AccountInfoPage = () => {
               <input
                 type="text"
                 name="state"
-                placeholder="state"
+                placeholder="State"
                 value={formData.state}
                 onChange={handleChange}
                 required
               />
-              
             </div>
             <div className="form-group">
               <input
@@ -176,11 +175,22 @@ const AccountInfoPage = () => {
           <h2>Past Orders</h2>
           {orders.length > 0 ? (
             orders.map((order, index) => (
-              <div key={index} className="order">
-                <span>{order.date}</span>
-                <span>{order.details}</span>
-                <span>{order.price}</span>
-                <input type="checkbox" checked={order.favorite} readOnly />
+              <div key={index} className="order-card">
+                <div className="order-details">
+                  <h3>Pizza Order</h3>
+                  <div className="order-info">
+                    <div><strong>Method:</strong> {order.method}</div>
+                    <div><strong>Size:</strong> {order.size}</div>
+                    <div><strong>Crust:</strong> {order.crust}</div>
+                    <div><strong>Toppings:</strong> {order.toppings.join(', ')}</div>
+                    <div><strong>Quantity:</strong> {order.quantity}</div>
+                    <div><strong>Price:</strong> ${order.price}</div>
+                  </div>
+                  <div className="favorite-checkbox">
+                    <input type="checkbox" checked={order.favorite} readOnly />
+                    <label>Favorite</label>
+                  </div>
+                </div>
               </div>
             ))
           ) : (
