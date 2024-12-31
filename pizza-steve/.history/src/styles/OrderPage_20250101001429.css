@@ -1,0 +1,72 @@
+/* Global Styles */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f8f9fa;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.order-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+header {
+  margin-bottom: 30px;
+}
+
+header h2 {
+  font-size: 32px;
+  color: #343a40;
+  text-align: center;
+  font-weight: bold;
+}
+
+.order-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.order-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border-left: 5px solid #ff5733;
+}
+
+.order-card h3 {
+  font-size: 24px;
+  color: #343a40;
+  margin-bottom: 10px;
+}
+
+.order-card p {
+  font-size: 16px;
+  color: #666;
+  margin: 5px 0;
+}
+
+.order-card p strong {
+  font-weight: bold;
+}
+
+.order-list p {
+  text-align: center;
+  font-size: 18px;
+  color: #888;
+}
+
+@media (max-width: 768px) {
+  .order-page {
+    padding: 10px;
+  }
+}
+z
