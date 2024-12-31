@@ -14,7 +14,10 @@ const AccountInfoPage = () => {
   });
 
   const [orders, setOrders] = useState([]);
+  const [cartItemsCount, setCartItemsCount] = useState(0);
   const userId = localStorage.getItem('userId'); 
+
+  // Fetch user data and orders on component mount
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -37,12 +40,12 @@ const AccountInfoPage = () => {
 
     const fetchUserOrders = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/api/orders/${userId}`);
-        if (!response.ok) throw new Error('Failed to fetch orders');
+        const response = await fetch(`http://localhost:3000/api/orders/confirmed/${userId}`);
+        if (!response.ok) throw new Error('Failed to fetch confirmed orders');
         const data = await response.json();
         setOrders(data);
       } catch (error) {
-        console.error('Error fetching user orders:', error);
+        console.error('Error fetching user confirmed orders:', error);
       }
     };
 
@@ -50,6 +53,10 @@ const AccountInfoPage = () => {
       fetchUserData();
       fetchUserOrders();
     }
+
+    // Fetch cart items count
+    const storedCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    setCartItemsCount(storedCartItems.length); // Update the cart item count
   }, [userId]);
 
   const handleChange = (e) => {
@@ -60,6 +67,7 @@ const AccountInfoPage = () => {
     }));
   };
 
+  // Handle form submission to update user info
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -83,6 +91,33 @@ const AccountInfoPage = () => {
     }
   };
 
+  // Handle toggling favorite status for an order
+  const toggleFavorite = async (orderId, favorite) => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/orders/${orderId}/favorite`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ favorite: !favorite }), // Toggle favorite status
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to update favorite status');
+      }
+  
+      const updatedOrder = await response.json();
+      console.log('Updated Order:', updatedOrder);
+  
+      setOrders((prevOrders) =>
+        prevOrders.map((order) => (order._id === updatedOrder._id ? updatedOrder : order))
+      );
+    } catch (error) {
+      console.error('Error updating favorite status:', error);
+    }
+  };
+
   return (
     <div className="account-info-container">
       <nav className="navbar">
@@ -93,8 +128,8 @@ const AccountInfoPage = () => {
           </a>
         </div>
         <ul className="navbar-links">
-          <li><a href="/">Home</a></li>
-          <li><a href="/orders">Order ({orders.length})</a></li>
+          <li><a href="/homepage">Home</a></li>
+          <li><a href="/cart">Cart ({cartItemsCount})</a></li> {/* Display cart item count */}
           <li><a href="/account">Account</a></li>
           <li><a href="/logout">Logout</a></li>
         </ul>
@@ -174,23 +209,23 @@ const AccountInfoPage = () => {
         <div className="past-orders-section">
           <h2>Past Orders</h2>
           {orders.length > 0 ? (
-            orders.map((order, index) => (
-              <div key={index} className="order-card">
+            orders.map((order) => (
+              <div key={order._id} className="order">
                 <div className="order-details">
-                  <h3>Pizza Order</h3>
-                  <div className="order-info">
-                    <div><strong>Method:</strong> {order.method}</div>
-                    <div><strong>Size:</strong> {order.size}</div>
-                    <div><strong>Crust:</strong> {order.crust}</div>
-                    <div><strong>Toppings:</strong> {order.toppings.join(', ')}</div>
-                    <div><strong>Quantity:</strong> {order.quantity}</div>
-                    <div><strong>Price:</strong> ${order.price}</div>
-                  </div>
-                  <div className="favorite-checkbox">
-                    <input type="checkbox" checked={order.favorite} readOnly />
-                    <label>Favorite</label>
-                  </div>
+                  <p><strong>Date:</strong> {new Date(order.createdAt).toLocaleDateString()}</p>
+                  <p><strong>Method:</strong> {order.method}</p>
+                  <p><strong>Size:</strong> {order.size}</p>
+                  <p><strong>Crust:</strong> {order.crust}</p>
+                  <p><strong>Quantity:</strong> {order.quantity}</p>
+                  <p><strong>Toppings:</strong> {order.toppings.join(', ')}</p>
+                  <p><strong>Price:</strong> ${order.price.toFixed(2)}</p>
                 </div>
+                <button
+                  className={`favorite-button ${order.favorite ? 'favorite' : ''}`}
+                  onClick={() => toggleFavorite(order._id, order.favorite)}
+                >
+                  {order.favorite ? '★' : '☆'}
+                </button>
               </div>
             ))
           ) : (

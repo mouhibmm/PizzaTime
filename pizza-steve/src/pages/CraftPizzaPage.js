@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../styles/CraftPizzaPage.css';
 import logo from '../assets/pngwing.com.png';
@@ -10,6 +10,7 @@ function CraftPizzaPage() {
   const [crust, setCrust] = useState('Thin Crust');
   const [quantity, setQuantity] = useState(1);
   const [toppings, setToppings] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
 
   const availableToppings = [
     'Pepperoni',
@@ -22,6 +23,7 @@ function CraftPizzaPage() {
     'Green Peppers',
   ];
 
+  // Handle change of toppings
   const handleToppingChange = (topping) => {
     setToppings((prev) =>
       prev.includes(topping)
@@ -30,32 +32,7 @@ function CraftPizzaPage() {
     );
   };
 
-  const handleAddToOrder = async () => {
-    const pizzaDetails = {
-      method,
-      size,
-      crust,
-      quantity,
-      toppings,
-      price: calculatePrice(size, toppings.length, quantity),
-      userId: localStorage.getItem('userId'), // Get userId from localStorage
-    };
-
-    try {
-      const res = await axios.post('http://localhost:3000/api/orders', pizzaDetails, {
-        headers: {
-          'Content-Type': 'application/json',
-          'x-auth-token': localStorage.getItem('token'), // Add token if needed
-        },
-      });
-      console.log('Order saved:', res.data);
-      alert('Pizza added to order!');
-    } catch (err) {
-      console.error('Error saving order:', err.response.data);
-      alert('Failed to add pizza to order');
-    }
-  };
-
+  // Calculate the total price based on size, toppings count, and quantity
   const calculatePrice = (size, toppingsCount, quantity) => {
     let basePrice = 10;
     if (size === 'Medium') basePrice += 3;
@@ -64,18 +41,58 @@ function CraftPizzaPage() {
     return (basePrice + toppingsPrice) * quantity;
   };
 
+  // Handle the add to order button click
+  const handleAddToOrder = async () => {
+    const pizzaDetails = {
+      method,
+      size,
+      crust,
+      quantity,
+      toppings,
+      price: calculatePrice(size, toppings.length, quantity),
+      userId: localStorage.getItem('userId'), // Ensure user is logged in
+    };
+
+    try {
+      const res = await axios.post('http://localhost:3000/api/orders', pizzaDetails, {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth-token': localStorage.getItem('token'), // Ensure valid token
+        },
+      });
+      console.log('Order saved:', res.data);
+      alert('Pizza added to order!');
+
+      // Update localStorage and set the cartItems state
+      const newCartItems = [...cartItems, res.data]; // Add new order to cart items
+      localStorage.setItem('cartItems', JSON.stringify(newCartItems)); // Store in localStorage
+      setCartItems(newCartItems); // Update the state
+    } catch (err) {
+      console.error('Error saving order:', err.response?.data);
+      alert('Failed to add pizza to order');
+    }
+  };
+
+  // Fetch cart items from localStorage on component mount
+  useEffect(() => {
+    const storedCartItems = JSON.parse(localStorage.getItem('cartItems'));
+    if (storedCartItems) {
+      setCartItems(storedCartItems);
+    }
+  }, []);
+
   return (
     <div className="craft-pizza-page">
       <nav className="navbar">
         <div className="navbar-logo">
-          <a href="/">
+          <a href="/homepage">
             <img src={logo} alt="Pizza Logo" className="navbar-img" />
             Pizza Steve
           </a>
         </div>
         <div className="nav-links">
-          <a href="/">Home</a>
-          <a href="/order">Order (0)</a>
+          <a href="/homepage">Home</a>
+          <a href="/cart">Cart ({cartItems.length})</a>
           <a href="/account">Account</a>
           <a href="/logout">Logout</a>
         </div>

@@ -43,7 +43,7 @@ const LoginPage = () => {
       localStorage.setItem('userName', result.firstname); // Store user name or other details
 
       // Navigate to the home page after successful login
-      navigate('/homepage'); // Replace '/homepage' with your actual homepage route
+      navigate('/homepage'); 
 
     } catch (error) {
       console.error('Error logging in:', error);
@@ -63,7 +63,7 @@ const LoginPage = () => {
         </div>
         <ul className="navbar-links">
           <li><a href="/register">Register</a></li>
-          <li><a href="/login">Login</a></li>
+          <li><a href="/">Login</a></li>
         </ul>
       </nav>
 

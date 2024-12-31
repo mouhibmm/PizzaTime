@@ -7,7 +7,9 @@ const orderSchema = new mongoose.Schema({
   crust: { type: String, required: true },
   quantity: { type: Number, required: true },
   toppings: { type: [String], required: true },
-  price: { type: Number, required: true }
+  price: { type: Number, required: true },
+  favorite: { type: Boolean, default: false },
+  status: { type: String, default: 'pending' }
 });
 
 const Order = mongoose.model('Order', orderSchema);

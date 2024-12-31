@@ -5,6 +5,9 @@ import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
 import CraftPizzaPage from './pages/CraftPizzaPage';
 import AccountInfoPage from './pages/AccountInfoPage';
+import CartPage from './pages/CartPage';
+
+
 
 function App() {
   return (
@@ -15,6 +18,7 @@ function App() {
         <Route path="/homepage" element={<HomePage />} />
         <Route path="/pizzacraft" element={<CraftPizzaPage />} />
         <Route path="/account" element={<AccountInfoPage />} />
+        <Route path="/cart" element={<CartPage />} />
       </Routes>
     </Router>
   );
