@@ -1,0 +1,191 @@
+
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4; 
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #000 !important; 
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+}
+
+.navbar-logo a {
+  color: white;
+  font-size: 1.5rem;
+  text-decoration: none;
+  margin-left: 20px;
+  font-weight: bold; 
+}
+
+.navbar-links {
+  display: flex;
+  gap: 20px;
+  margin-right: 20px; 
+}
+
+.navbar-links li {
+  list-style: none;
+}
+
+.navbar-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.navbar-links a:hover {
+  color: #ccc; 
+}
+
+.navbar-img {
+  height: 50px; 
+  margin-right: 10px; 
+}
+
+
+.account-info-container {
+    
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 50px 20px;
+    min-height: 100vh;
+    background-color: #f4f4f4;
+}
+
+.account-info-content {
+    margin-top: 70px;
+    display: flex;
+    gap: 40px;
+    max-width: 1200px;
+    width: 100%;
+}
+
+.account-info-section {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    flex: 2; 
+    min-width: 300px;
+}
+
+.account-info-section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+}
+
+.account-info-form .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+.account-info-form .form-group input,
+.account-info-form .form-group select {
+    padding: 12px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.account-info-form .form-group input:focus,
+.account-info-form .form-group select:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.update-button {
+    width: 100%;
+    padding: 14px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.update-button:hover {
+    background-color: #218838;
+}
+.account-info-section,
+.past-orders-section {
+    width: 48%;
+    margin-top: -20px;
+  }
+  
+  .account-info-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form-group {
+    margin-bottom: 10px;
+  }
+  
+  .form-group input {
+    padding: 8px;
+    margin-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .update-button {
+    padding: 10px;
+    background-color: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .update-button:hover {
+    background-color: #555;
+  }
+  
+  .past-orders-section h2 {
+    margin-bottom: 20px;
+  }
+  
+  .order-card {
+    background-color: #f4f4f4;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .order-details {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .order-info div {
+    margin-bottom: 10px;
+  }
+  
+  .favorite-checkbox {
+    display: flex;
+    align-items: center;
+  }
+  
+  .favorite-checkbox input {
+    margin-right: 10px;
+  }
+  
+  .favorite-checkbox label {
+    font-weight: bold;
+  }
